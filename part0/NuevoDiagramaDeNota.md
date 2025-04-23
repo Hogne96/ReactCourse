@@ -1,37 +1,38 @@
 sequenceDiagram
-    participant browser
-    participant server
+    participant Browser
+    participant Server
 
-    %% El usuario hace POST para crear la nota
-    browser->>server: POST /exampleapp/new_note\nPayload: note="n4"
-    activate server
-    server-->>browser: 302 Found (Location: /exampleapp/notes)
-    deactivate server
+    %% 1. Crear la nota
+    Browser->>Server: POST /exampleapp/new_note  
+    Note left of Browser: Payload: note=Prueba  
+    activate Server
+    Server-->>Browser: 302 Found  
+    Note right of Server: Location: /exampleapp/notes  
+    deactivate Server
 
-    %% El navegador sigue la redirección y recarga la página de notas
-    browser->>server: GET /exampleapp/notes
-    activate server
-    server-->>browser: HTML document
-    deactivate server
+    %% 2. Recarga de la página de notas
+    Browser->>Server: GET /exampleapp/notes  
+    activate Server
+    Server-->>Browser: HTML document  
+    deactivate Server
 
-    %% Se cargan recursos estáticos
-    browser->>server: GET /exampleapp/main.css
-    activate server
-    server-->>browser: CSS file
-    deactivate server
+    %% 3. Carga de recursos estáticos
+    Browser->>Server: GET /exampleapp/main.css  
+    activate Server
+    Server-->>Browser: CSS file  
+    deactivate Server
 
-    browser->>server: GET /exampleapp/main.js
-    activate server
-    server-->>browser: JavaScript file
-    deactivate server
+    Browser->>Server: GET /exampleapp/main.js  
+    activate Server
+    Server-->>Browser: JavaScript file  
+    deactivate Server
 
-    Note right of browser: El navegador ejecuta main.js\
-y dispara la petición para obtener los datos actualizados
+    %% 4. Obtención de datos actualizados
+    Note right of Browser: main.js ejecuta fetch('/exampleapp/data.json')
+    Browser->>Server: GET /exampleapp/data.json  
+    activate Server
+    Server-->>Browser: JSON array of notes (incluye "Prueba")  
+    deactivate Server
 
-    %% Se vuelve a obtener el JSON con todas las notas
-    browser->>server: GET /exampleapp/data.json
-    activate server
-    server-->>browser: JSON array of notes
-    deactivate server
-
-    Note right of browser: El callback renderiza la nueva nota en la lista
+    %% 5. Renderizado final
+    Note right of Browser: El callback pinta la lista con la nueva nota

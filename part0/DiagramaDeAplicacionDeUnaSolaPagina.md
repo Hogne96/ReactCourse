@@ -1,31 +1,33 @@
 sequenceDiagram
-    participant browser
-    participant server
+    participant Browser
+    participant Server
 
-    %% Solicitud inicial de la página SPA
-    browser->>server: GET /exampleapp/spa
-    activate server
-    server-->>browser: HTML document (SPA shell)
-    deactivate server
+    %% 1. Carga inicial de la SPA
+    Browser->>Server: GET /exampleapp/spa  
+    Note left of Browser: Sin payload  
+    activate Server
+    Server-->>Browser: 200 OK (HTML del “shell” SPA)  
+    deactivate Server
 
-    %% Carga de recursos estáticos
-    browser->>server: GET /exampleapp/main.css
-    activate server
-    server-->>browser: CSS file
-    deactivate server
+    %% 2. Carga de estilos y lógica
+    Browser->>Server: GET /exampleapp/main.css  
+    activate Server
+    Server-->>Browser: CSS file  
+    deactivate Server
 
-    browser->>server: GET /exampleapp/spa.js
-    activate server
-    server-->>browser: JavaScript file (SPA logic)
-    deactivate server
+    Browser->>Server: GET /exampleapp/spa.js  
+    activate Server
+    Server-->>Browser: JavaScript file (lógica SPA)  
+    deactivate Server
 
-    Note right of browser: El navegador ejecuta spa.js\
-y arranca la aplicación de una sola página
+    %% 3. Inicio de la aplicación en el cliente
+    Note right of Browser: spa.js arranca la aplicación sin recargar la página
 
-    %% Petición de datos
-    browser->>server: GET /exampleapp/data.json
-    activate server
-    server-->>browser: JSON array of notes
-    deactivate server
+    %% 4. Petición de datos
+    Browser->>Server: GET /exampleapp/data.json  
+    activate Server
+    Server-->>Browser: JSON array of notes  
+    deactivate Server
 
-    Note right of browser: El SPA renderiza la lista de notas sin recargar la página
+    %% 5. Renderizado dinámico
+    Note right of Browser: El SPA pinta la lista de notas usando los datos recibidos

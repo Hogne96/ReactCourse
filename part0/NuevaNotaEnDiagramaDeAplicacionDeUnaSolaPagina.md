@@ -1,12 +1,21 @@
 sequenceDiagram
-    participant browser
-    participant server
+    participant Browser
+    participant Server
 
-    %% El usuario hace POST para crear la nota en la SPA
-    browser->>server: POST /exampleapp/new_note_spa\nPayload: note="n4"
-    activate server
-    server-->>browser: 201 Created\n{"content":"n4","date":"2025-04-23"}
-    deactivate server
+    %% 1. Crear la nota en la SPA
+    Browser->>Server: POST /exampleapp/new_note_spa  
+    Note left of Browser: Payload JSON:  
+    Note left of Browser: {  
+    Note left of Browser:  content: "prueba carga spa",  
+    Note left of Browser:  date: "2025-04-23T17:38:07.637Z"  
+    Note left of Browser: }  
+    activate Server
+    Server-->>Browser: 201 Created  
+    Note right of Server: Response JSON:  
+    Note right of Server: {"content":"prueba carga spa","date":"2025-04-23T17:38:07.637Z"}  
+    deactivate Server
 
-    %% El cliente SPA actualiza la interfaz
-    Note right of browser: spa.js recibe la respuesta\ny añade la nueva nota al listado\n—sin recargar nada—
+    %% 2. Actualización en el cliente
+    Note right of Browser: spa.js recibe la respuesta  
+    Note right of Browser: Añade la nueva nota al DOM  
+    Note right of Browser: (sin recargar nada)
